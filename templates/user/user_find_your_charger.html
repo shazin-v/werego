@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/user/find-your-charger.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+    <link rel=" icon" href="/static/temp/assets/images/icon.ico"/>
+    <title>find your charger</title>
+  </head>
+
+  <!-- HEADER SECTION -->
+
+  <header>
+    <a href="{{ url_for('home') }}" class="logo"> <img src="/static/pic/logo.png" alt="logo"> </a>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('user_find_your_charger') }}">Find your charger</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('contact_us') }}">Contact us</a></li>
+    </ul>
+    </nav>
+    
+    
+</header>
+
+  <main>
+    <!-- BODY SECTION -->
+
+    <div class="container">
+      
+      <h1>Find Your Charge Point</h1>
+      <form action="{{ url_for('search_stations') }}" method="post">
+        <label for="city">Select a city: </label>
+        <select id="city" name="city" required>
+          <option value="">--Select a city--</option>
+          <option value="thiruvananthapuram">Thiruvananthapuram</option>
+          <option value="Kollam">Kollam</option>
+          <option value="Pathanamthitta">Pathanamthitta</option>
+          <option value="Alapuzha">Alapuzha</option>
+          <option value="Kottayam">Kottayam</option>
+          <option value="Idukki">Idukki</option>
+          <option value="Ernakulam">Ernakulam</option>
+          <option value="Thrissur">Thrissur</option>
+          <option value="Palakkad">Palakkad</option>
+          <option value="Malappuram">Malappuram</option>
+          <option value="Kozhikode">Kozhikode</option>
+          <option value="Wayanad">Wayanad</option>
+          <option value="kannur">Kannur</option>
+          <option value="Kasaragod">Kasaragod</option>
+        </select>
+        <br />
+        <br>
+        <label for="charger_type">Select Charging Type:</label>
+        <select name="charger_type" id="charger_type" required>
+          <option value="">--Select--</option>
+          <option value="AC Level 1 Charging">AC Level 1 Charging</option>
+          <option value="AC Level 2 Charging">AC Level 2 Charging</option>
+          <option value="DC Fast Charging">DC Fast Charging</option>
+        </select>
+        <br />
+        <button id="book" type="submit"> Search  </button>
+      </form>
+  </main>
+
+  <!-- FOOTER SECTION -->
+
+  <footer>
+    <div class="footer-content">
+      <h3>footer</h3>
+      <p>&copy; 2023 EV Charging Station Finder. All rights reserved.</p>
+    </div>
+  </footer>
+</html>

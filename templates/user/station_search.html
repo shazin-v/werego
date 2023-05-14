@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/user/station_search.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel=" icon" href="/static/temp/assets/images/icon.ico"/>
+    <title>station search</title>
+</head>
+
+
+
+    
+
+<!-- HEADER SECTION -->
+
+
+<header>
+    <a href="{{ url_for('home') }}" class="logo"> <img src="/static/pic/logo.png" alt="logo"> </a>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('user_find_your_charger') }}">Find your charger</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('contact_us') }}">Contact us</a></li>
+        </ul>
+    </nav>
+    
+    
+</header>
+
+
+
+<body>
+	<h1>EV Charging Stations Booking</h1>
+	<p><strong>you have selected the following options:<br><br></strong></p>
+	<ul>
+		<li><strong>City:<br><br> {{ city }} </strong></li><br>
+		<li><strong>Charging Type:<br><br> {{ charger_type }} </strong></li><br>
+	  </ul>
+	  
+	<p>Please select a charging station from the list below:<br><br></p>
+	<table id="myTable" class="display">
+		<thead>
+			<tr>
+			  <th>Station Name</th>
+			  <th>City</th>
+			  <th>Address</th>
+			  <th>Charge Type</th>
+			  <th>Available Ports</th>
+			  <th style="width: 10%" orderable="false">Book</th>
+			</tr>
+		  </thead>
+		  <tbody>
+			{% for station in data %}
+			<tr>
+			  <td>{{ station.station_name }}</td>
+			  <td>{{ station.city }}</td>
+			  <td>{{ station.address }}</td>
+			  <td>{{ station.charger_type }}</td>
+			  <td>
+				<select name="ports">
+				  {% for port in station.available_ports %}
+				  <option value="{{ port }}">{{ port }}</option>
+				  {% endfor %}
+				</select>
+			  </td>
+			  <td>
+				<button class="book-now-btn" data-station="{{ station.station_name }}" data-city="{{ station.city }}" data-available-ports="{{ station.available_ports }}">Book Now</button>
+			  </td>
+			</tr>
+			{% endfor %}
+		  </tbody>
+		  
+	</table>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<script>
+	$(function() {
+		$('.book-now-btn').on('click', function() {
+			var stationName = $(this).data('station');
+			var city = $(this).data('city');
+			var available_ports = $(this).data('available-ports');
+
+			$.ajax({
+				url: '/booking',
+				method: 'POST',
+				data: { 
+					station_name: stationName,
+					city: city,
+					available_ports: available_ports 
+				},
+				success: function(response) {
+					window.location.href = '/booking?station_name=' + stationName + '&city=' + city + '&available_ports=' + available_ports;
+				},
+				error: function(error) {
+   				console.log("There was an error in ajax: " + error);
+}
+			});
+		});
+		$('#myTable').DataTable({
+			paging: false,
+			searching: false,
+			columnDefs: [{ orderable: false, targets: 4 }]
+		});
+	});
+</script>
+</body>
+</html>
