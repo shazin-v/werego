@@ -24,7 +24,7 @@
   <nav>
     <ul>
       <li><a href="{{ url_for('home') }}">Home</a></li>
-      <li><a href="{{ url_for('find_your_charger') }}">Find your charger</a></li>
+      <!-- <li><a href="{{ url_for('find_your_charger') }}">Find your charger</a></li> -->
       <li><a href="{{ url_for('about') }}">About</a></li>
       <li><a href="{{ url_for('contact_us') }}">Contact us</a></li>
   </ul>
@@ -86,7 +86,8 @@
   </nav>
 
 
-  <form action="" method="get"><table id="myTable" class="display" width="600" border="1" class="table table-active">
+  <form action="" method="get">
+    <table id="myTable" class="display" width="600" border="1" class="table table-active">
     <tr>
       <th scope="col">SL.NO</th>
       <th scope="col">NAME</th>
@@ -105,7 +106,7 @@
       <td>{{ i.name }}</td>
       <td>{{ i.email }}</td>
       <!-- <input type="hidden" name="user_id" value=""> -->
-      <td><p><a href="/adm_delete_user/{{ i.user_id }}" class="btn btn-dark">Remove</button></td>
+      <td><p><a href="/adm_delete_user/{{ i.login_id }}" class="btn btn-dark">Remove</button></td>
       <!-- <td><p><a href="/adm_delete_hospital/{{ i.hid }}" class="btn btn-dark">DELETE</a></p> -->
         <!-- <td>&nbsp;{{ i.area }}</td> -->
      <!-- <td>&nbsp;{{ i.city }}</td>

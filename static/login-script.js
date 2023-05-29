@@ -1,80 +1,92 @@
-// function setFormMessage(formElement, type, message) {
-//     const messageElement = formElement.querySelector(".form__message");
+const loginForm = document.querySelector('#login');
+const createAccountForm = document.querySelector('#createAccount');
+const loginLink = document.querySelector('#loginLink');
+const createAccountLink = document.querySelector('#createAccountLink');
 
-//     messageElement.textContent = message;
-//     messageElement.classList.remove("form__message--success", "form__message--error");
-//     messageElement.classList.add(`form__message--${type}`);
-// }
-
-// function setInputError(inputElement, message) {
-//     inputElement.classList.add("form__input--error");
-//     inputElement.parentElement.querySelector(".form__input-error-message").textContent = message;
-// }
-
-// function clearInputError(inputElement) {
-//     inputElement.classList.remove("form__input--error");
-//     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
-// }
-
-// document.addEventListener("DOMContentLoaded", () => {
-//     const loginForm = document.querySelector("#login");
-//     const createAccountForm = document.querySelector("#createAccount");
-
-//     document.querySelector("#linkCreateAccount").addEventListener("click", e => {
-//         e.preventDefault();
-//         loginForm.classList.add("form--hidden");
-//         createAccountForm.classList.remove("form--hidden");
-//     });
-
-//     document.querySelector("#linkLogin").addEventListener("click", e => {
-//         e.preventDefault();
-//         loginForm.classList.remove("form--hidden");
-//         createAccountForm.classList.add("form--hidden");
-//     });
-
-//     loginForm.addEventListener("submit", e => {
-//         e.preventDefault();
-
-//         // Perform your AJAX/Fetch login
-
-//         setFormMessage(loginForm, "error", "Invalid username/password combination");
-//     });
-
-//     // document.querySelectorAll(".form__input").forEach(inputElement => {
-//     //     inputElement.addEventListener("blur", e => {
-//     //         if (e.target.id === "signupUsername" && e.target.value.length > 0 && e.target.value.length < 10) {
-//     //             setInputError(inputElement, "Username must be at least 10 characters in length");
-//     //         }
-//     //     });
-
-//     //     inputElement.addEventListener("input", e => {
-//     //         clearInputError(inputElement);
-//     //     });
-//     // });
-// });
-
-
-const loginForm = document.querySelector("#login");
-const createAccountForm = document.querySelector("#createAccount");
-const createAccountLink = document.querySelector("#createAccountLink");
-const loginLink = document.querySelector("#loginLink");
-
-createAccountLink.addEventListener("click", e => {
+loginLink.addEventListener('click', e => {
     e.preventDefault();
-    loginForm.classList.add("form--hidden");
-    createAccountForm.classList.remove("form--hidden");
+    loginForm.classList.remove('form--hidden');
+    createAccountForm.classList.add('form--hidden');
 });
 
-loginLink.addEventListener("click", e => {
+createAccountLink.addEventListener('click', e => {
     e.preventDefault();
-    loginForm.classList.remove("form--hidden");
-    createAccountForm.classList.add("form--hidden");
+    loginForm.classList.add('form--hidden');
+    createAccountForm.classList.remove('form--hidden');
 });
 
-// loginForm.addEventListener("submit", e => {
-//     e.preventDefault();
+loginForm.addEventListener('submit', e => {
+    const username = document.querySelector('#username').value;
+    const password = document.querySelector('#password').value;
+    const errorContainer = document.querySelector('#login .form__message--error');
+    const errorMessages = document.querySelectorAll('#login .form__input-error-message');
+    let isError = false;
 
-//     // Perform your AJAX/Fetch login
+    // Clear previous error messages
+    errorContainer.innerHTML = '';
+    errorMessages.forEach(message => message.textContent = '');
 
-//     setFormMessage(loginForm, "error", "Invalid username/password combination");
-// });
+    // Perform form validation
+    if (username.trim() === '') {
+        displayErrorMessage('username', 'Please enter a username');
+        isError = true;
+    }
+
+    if (password.trim() === '') {
+        displayErrorMessage('password', 'Please enter a password');
+        isError = true;
+    }
+
+    if (isError) {
+        e.preventDefault();
+        errorContainer.textContent = 'Please enter the required details.';
+    }
+});
+
+createAccountForm.addEventListener('submit', e => {
+    const username = document.querySelector('#signupUsername').value;
+    const email = document.querySelector('#createAccount input[name="email"]').value;
+    const password = document.querySelector('#createAccount input[name="password"]').value;
+    const confirmPassword = document.querySelector('#createAccount input[name="confirmPassword"]').value;
+    const errorContainer = document.querySelector('#createAccount .form__message--error');
+    const errorMessages = document.querySelectorAll('#createAccount .form__input-error-message');
+    let isError = false;
+
+    // Clear previous error messages
+    errorContainer.innerHTML = '';
+    errorMessages.forEach(message => message.textContent = '');
+
+    // Perform form validation
+    if (username.trim() === '') {
+        displayErrorMessage('signupUsername', 'Please enter a username');
+        isError = true;
+    }
+
+    if (email.trim() === '') {
+        displayErrorMessage('email', 'Please enter an email address');
+        isError = true;
+    }
+
+    if (password.trim() === '') {
+        displayErrorMessage('password', 'Please enter a password');
+        isError = true;
+    }
+
+    if (confirmPassword.trim() === '') {
+        displayErrorMessage('confirmPassword', 'Please confirm the password');
+        isError = true;
+    } else if (password !== confirmPassword) {
+        displayErrorMessage('confirmPassword', 'Passwords do not match');
+        isError = true;
+    }
+
+    if (isError) {
+        e.preventDefault();
+        errorContainer.textContent = 'Please enter the required details.';
+    }
+});
+
+function displayErrorMessage(inputName, message) {
+    const errorContainer = document.querySelector(`#${inputName} + .form__input-error-message`);
+    errorContainer.textContent = message;
+}

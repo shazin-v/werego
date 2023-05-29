@@ -24,7 +24,7 @@
   <nav>
     <ul>
       <li><a href="{{ url_for('home') }}">Home</a></li>
-      <li><a href="{{ url_for('find_your_charger') }}">Find your charger</a></li>
+      <!-- <li><a href="{{ url_for('find_your_charger') }}">Find your charger</a></li> -->
       <li><a href="{{ url_for('about') }}">About</a></li>
       <li><a href="{{ url_for('contact_us') }}">Contact us</a></li>
     </ul>
@@ -111,7 +111,7 @@
     <td>{{ booking.station_name }}</td>
     <td>{{ booking.available_ports }}</td>
     <td>{{ booking.login_id }}</td>
-    <td><p><a href="/adm_delete_station/{{ booking.station_name }}" class="btn btn-dark">Remove booking</a></p></td>
+    <td><p><a href="/adm_delete_booking/{{ booking.booking_id }}" class="btn btn-dark">Remove booking</a></p></td>
   </tr>
 {% endfor %}
 

@@ -19,26 +19,25 @@ form.addEventListener("submit", function(event) {
 	}
 
 	// Send email to the server to reset the password
-	const xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState === XMLHttpRequest.DONE) {
-			if (xhr.status === 200) {
+	fetch("{{ url_for('forgot_password') }}", {
+		method: "POST",
+		headers: {
+			"Content-type": "application/x-www-form-urlencoded"
+		},
+		body: `email=${encodeURIComponent(email)}`
+	})
+		.then(response => {
+			if (response.ok) {
 				result.innerHTML = "An email has been sent to your email address with instructions on how to reset your password.";
 				result.style.display = "block";
 			} else {
 				error.innerHTML = "Sorry, we couldn't find an account associated with that email address.";
 				error.style.display = "block";
 			}
-		}
-	}
-	xhr.open("POST", "{{ url_for('forgot_password') }}");
-	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	xhr.send(`email=${email}`);
+		})
+		.catch(error => {
+			console.error("Error sending request:", error);
+			error.innerHTML = "Sorry, an error occurred while sending the request.";
+			error.style.display = "block";
+		});
 });
-
-// Function to validate email format
-function validateEmail(email) {
-	const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-	return re.test(email);
-}
-

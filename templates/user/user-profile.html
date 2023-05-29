@@ -88,7 +88,7 @@
   <!--  -->
   <div class="form-container">
     <h1>Update Account Details</h1>
-    <form>
+    <form action="{{ url_for('user_profile') }}" method="post">
       <label for="name">Name</label>
       <input type="text" id="name" name="name">
       <label for="email">Email</label>

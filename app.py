@@ -58,17 +58,17 @@ def forgot_password():
 
         # Check if email exists in database
         db = Db()
-        user = db.selectOne("SELECT * FROM user WHERE email=%s", (email,))
+        user = db.selectOne("SELECT * FROM login WHERE email=%s", (email,))
         if not user:
             return "Sorry, we couldn't find an account associated with that email address.", 400
 
-        # Send email with password
+         # Send email with passw    ord reset instructions or link
         password = user['password']
-        sender_email = "your_email@example.com"
-        sender_password = "your_email_password"
+        sender_email = "a97298570@gmail.com"
+        sender_password = "56B50C32C322385ED3009518610638823005"
         recipient_email = email
-        subject = "Password for EV STATION BOOKING WEBSITE"
-        content = "Your password for  EV STATION BOOKING WEBSITE is: " + password
+        subject = "Password Reset for EV STATION BOOKING WEBSITE"
+        content = "Your password for EV STATION BOOKING WEBSITE has been reset. Please login with your new password."
         host = "smtp.gmail.com"
         port = 465
         message = MIMEMultipart()
@@ -77,16 +77,18 @@ def forgot_password():
         message['Subject'] = Header(subject)
         message.attach(MIMEText(content, 'plain', 'utf-8'))
         try:
-            server = smtplib.SMTP_SSL(host, port)
-            server.login(sender_email, sender_password)
-            server.sendmail(sender_email, recipient_email, message.as_string())
-            server.quit()
-            return "An email has been sent to your email address with instructions on how to reset your password."
-        except Exception as e:
-            print("Error sending email:", str(e))
-            return "Sorry, an error occurred while sending the email.", 500
+            with smtplib.SMTP_SSL(host, port) as server:            
+                server.login("a97298570@gmail.com", "56B50C32C322385ED3009518610638823005")
+                server.sendmail("a97298570@gmail.com", recipient_email, message.as_string())
+
+                return "An email has been sent to your email address with instructions on how to reset your password."
+        except smtplib.SMTPAuthenticationError:
+            return "Failed to authenticate with the email server. Please check your email credentials.", 500
+        except smtplib.SMTPException as e:
+            return f"An error occurred while sending the email: {str(e)}", 500
 
     return render_template("forgot_password.html")
+
 
 
 
@@ -136,24 +138,38 @@ def logout():
 
     # =========================
 
-@app.route('/register',methods=['GET','POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == "POST":
-        name = request.form['textfield']
-        area = request.form['textfield2']
-        city = request.form['textfield3']
-        post = request.form['textfield4']
-        district = request.form['select2']
-        state = request.form['select']
-        email = request.form['textfield5']
-        phoneno = request.form['textfield6']
-        password = request.form['textfield7']
-        db=Db()
-        qry=db.insert("insert into login VALUES ('','"+email+"','"+password+"','user')")
-        db.insert("insert into user values('"+str(qry)+"','"+name+"','"+area+"','"+city+"','"+post+"','"+district+"','"+state+"','"+email+"','"+phoneno+"')")
-        return '''<script>alert('registered');window.location="/"</script>'''
+        username = request.form['signupUsername']
+        email = request.form['email']
+        password = request.form['password']
+        confirmPassword = request.form['confirmPassword']
+
+        # Perform form validation
+        if username.strip() == '':
+            return redirect(url_for('register', error='Please enter a username', form_id='createAccount'))
+
+        if email.strip() == '':
+            return redirect(url_for('register', error='Please enter an email address', form_id='createAccount'))
+
+        if password.strip() == '':
+            return redirect(url_for('register', error='Please enter a password', form_id='createAccount'))
+
+        if confirmPassword.strip() == '':
+            return redirect(url_for('register', error='Please confirm the password', form_id='createAccount'))
+
+        if password != confirmPassword:
+            return redirect(url_for('register', error='Passwords do not match', form_id='createAccount'))
+
+        db = Db()
+        qry = db.insert("INSERT INTO login (username, email, password, usertype) VALUES (%s, %s,%s, 'user')", (username, email, password))
+
+        return '<script>alert("User registered"); window.location.href="/login";</script>'
     else:
-        return render_template("user/register.html")
+        error = request.args.get('error')  # Get the error message from the URL parameters
+        return render_template("login.html", error=error , form_id='createAccount')
+
 
 
 
@@ -210,25 +226,40 @@ def adm_delete_station(station_name):
         return redirect('/')
 # =======================================
 
+
+
+
+
+@app.route("/adm_delete_feedback/<feedback>")
+def adm_delete_feedback(feedback):
+    print('session ', session)
+    if session['user_type'] == 'admin':
+        db = Db()
+        qry = db.delete("delete from contact_us where Sl_no='"+feedback+"'")
+        return '''<script>alert('feedback deleted');window.location="/view_feedback"</script>'''
+    else:
+        return redirect('/')
+
+
+
 @app.route('/user-list')
 def user_list():
     print('session ', session)
     if session['user_type'] == 'admin':
         db=Db()
-        qry = db.select("SELECT user_id, email, name FROM user WHERE usertype='user'")
+        qry = db.select("SELECT login_id, email, name FROM login WHERE usertype='user'")
         return render_template("admin/user-list.html",data=qry)
     else:
         return redirect('/')
 
 
 # ==================delete user===========
-@app.route("/adm_delete_user/<user_id>")
-def adm_delete_user(user_id):
+@app.route("/adm_delete_user/<login_id>")
+def adm_delete_user(login_id):
     print('session ', session)
     if session['user_type'] == 'admin':
         db = Db()
-        qry = db.delete("delete from login where login_id='"+user_id+"'")
-        ss=db.delete("delete from user where user_id='"+user_id+"'")
+        qry = db.delete("delete from login where login_id='"+login_id+"'")
         return '''<script>alert('user deleted');window.location="/user-list"</script>'''
     else:
         return redirect('/')
@@ -239,7 +270,7 @@ def view_booking():
     print('session ', session)
     if session['user_type'] == 'admin':
         db=Db()
-        bookings = db.select("select booking_id	, booking_date, time_from, time_to, city, station_name, available_ports, login_id  from bookings where login_id = '%s' order by booking_date desc;", (session['uid'],))
+        bookings = db.select("select booking_id	, booking_date, time_from, time_to, city, station_name, available_ports, login_id  from bookings  order by booking_date desc;")
         return render_template('admin/view_booking.html', bookings=bookings)
     else:
         return redirect('/')
@@ -274,13 +305,41 @@ def user_dashboard():
         return redirect('/')
 
 
+@app.route('/usr_delete_booking/<booking_date>')
+def usr_delete_booking(booking_date):
+    if 'user_type' in session and session['user_type'] == "user":
+        username = session['username'] # get the username from the session
+        db = Db()
+        
+        # Delete the booking from the table
+        qry = db.delete("delete from bookings WHERE booking_date = %s", (booking_date,))
+         # Retrieve the updated bookings
+        bookings = db.select("SELECT booking_id, booking_date, time_from, time_to, city, station_name, available_ports, login_id FROM bookings WHERE login_id = %s ORDER BY booking_date DESC", (session['uid'],))
+        return '''<script>alert('booking deleted');window.location="/user-dashboard"</script>'''
+    else:
+         return redirect('/user-dashboard')
 
 
 
 
-@app.route('/user-profile')
+
+@app.route('/user-profile', methods=['GET', 'POST'])
 def user_profile():
-    return render_template('user/user-profile.html')
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm-password']
+        
+        if password != confirm_password:
+            return redirect(url_for('user_profile', error='Passwords do not match'))
+        
+        db = Db()
+        qry = db.update("UPDATE login SET name = %s, email = %s, password = %s WHERE username = %s", (name, email, password, session['username']))  # Assuming you have stored the logged-in user's username in the session
+        return '<script>alert("Account details updated"); window.location.href="/user-profile";</script>'
+
+    error = request.args.get('error')
+    return render_template('user/user-profile.html', error=error)
 
 
 

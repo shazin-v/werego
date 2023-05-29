@@ -89,8 +89,8 @@
       <div class="container-fluid">
         <h1 class="mt-4">Welcome to your dashboard {{ username }}! </h1>
         <h2>Upcoming bookings:</h2><br>
-        <form action="" method="get">
-        <table id="myTable" class="display" width="700" border="2" class="table table-active">       
+        <form action="" method="POST">
+          <table id="myTable" class="display" width="700" border="2" class="table table-active">       
           <tr>
             <th>booking Date</th>
             <th>Time from</th>
@@ -108,7 +108,7 @@
     <td>{{ booking.city }}</td>
     <td>{{ booking.station_name }}</td>
     <td>{{ booking.available_ports }}</td>
-    <td><p><a href="/adm_delete_station/{{ booking.station_name }}" class="btn btn-dark">cancel booking</a></p></td>
+    <td><p><a href="/usr_delete_booking/{{ booking.booking_date }}" class="btn btn-dark">cancel booking</a></p></td>
   </tr>
 {% endfor %}
 
