@@ -49,6 +49,15 @@ Book a Charging Slot: Reserve an available slot at your chosen station.
 Admin Features: If you are a charging station operator, log in to the admin panel to manage your stations and slots.
 
 
+## screenshots
+
+![Screenshot 1](screenshots/admin/dashboard.png)
+*Caption for Screenshot 1*
+
+![Screenshot 2](screenshots/admin/managestation.png)
+*Caption for Screenshot 2*
+
+
 ## Contributing
 We welcome contributions from the community to improve Werego. To contribute:
 
