@@ -51,10 +51,10 @@ Admin Features: If you are a charging station operator, log in to the admin pane
 
 ## screenshots
 
-![Screenshot 1](screenshots/admin/dashboard.png)
+![Screenshot 1](screenshot/admin/dashboard.png)
 *Caption for Screenshot 1*
 
-![Screenshot 2](screenshots/admin/managestation.png)
+![Screenshot 2](screenshot/admin/managestation.png)
 *Caption for Screenshot 2*
 
 
