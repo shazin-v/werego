@@ -50,12 +50,37 @@ Admin Features: If you are a charging station operator, log in to the admin pane
 
 
 ## screenshots
+## Admin - Page
 
 ![Screenshot 1](screenshot/admin/dashboard.png)
-*Caption for Screenshot 1*
+Admin Dashboard
 
 ![Screenshot 2](screenshot/admin/manage_station.png)
-*Caption for Screenshot 2*
+Managing station
+
+![Screenshot 1](screenshot/admin/view_bookings.png)
+View booking
+
+![Screenshot 2](screenshot/admin/view_feedback.png)
+Manage feedback
+
+![Screenshot 2](screenshot/admin/view_user.png)
+Manage users
+
+## User - page
+
+![Screenshot 1](screenshot/user/dashboard.png)
+User Dashboard
+
+![Screenshot 2](screenshot/user/profile.png)
+User Profile Update
+
+![Screenshot 1](screenshot/user/station_search.png)
+Searching Nearby Station
+
+![Screenshot 2](screenshot/user/booking_page.png)
+Booking Page
+
 
 
 ## Contributing
