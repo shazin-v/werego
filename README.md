@@ -51,9 +51,24 @@ Follow these steps to set up Werego on your local machine:
 
 4. **Database Setup:**
 
-   Open MySQL and create a database for Werego (e.g., ev_db).
-   Update the database credentials in the project's configuration file to match your local MySQL setup.
-   Use the provided SQL file (if available) or manually create tables for booking, user, admin, and any other required entities based on the project’s models.
+      - Install XAMPP:
+
+      Download and install XAMPP from the official website.
+      - Start the XAMPP Control Panel.
+      Start the Apache and MySQL services.
+      Install MySQL Workbench:
+
+      Download and install MySQL Workbench from the official website.
+      - Open MySQL Workbench and create a new connection:
+      Connection Name: Localhost
+      Hostname: localhost
+      Port: 3306 (or the port you have configured for MySQL)
+      Username: root
+      Password: admin 
+
+      Open MySQL and create a database for Werego (e.g., ev_db).
+      Update the database credentials in the project's configuration file to match your local MySQL setup.
+      Use the provided SQL file (if available) or manually create tables for booking, user, admin, and any other required entities based on the project’s models.
 
 5. **Run the Application:**
 
@@ -126,7 +141,6 @@ We welcome contributions from the community to improve Werego. To contribute:
 ### Future Plans
 
 I will be converting Werego to use Next.js, React, TypeScript, Tailwind CSS, MongoDB, FastAPI, Express, Node.js, GraphQL, and Jest. The deployment will be done on Vercel. Feel free to create a fork and implement features or enhancements using these technologies!
-
 
 ```
 
