@@ -102,13 +102,13 @@
           </tr>
           {% for booking in bookings %}
   <tr>
-    <td>{{ booking.booking_date }}</td>
-    <td>{{ booking.time_from }}</td>
-    <td>{{ booking.time_to }}</td>
-    <td>{{ booking.city }}</td>
-    <td>{{ booking.station_name }}</td>
-    <td>{{ booking.available_ports }}</td>
-    <td><p><a href="/usr_delete_booking/{{ booking.booking_date }}" class="btn btn-dark">cancel booking</a></p></td>
+    <td>{{ booking.Booking_date }}</td>
+    <td>{{ booking.Time_from }}</td>
+    <td>{{ booking.Time_to }}</td>
+    <td>{{ booking.City }}</td>
+    <td>{{ booking.Station_name }}</td>
+    <td>{{ booking.Available_ports }}</td>
+    <td><p><a href="/usr_delete_booking/{{ booking.booking_id }}" class="btn btn-dark">Cancel Booking</a></p></td>
   </tr>
 {% endfor %}
 

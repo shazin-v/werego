@@ -85,19 +85,19 @@
          
   <h1>Booking Page</h1>
   <form action="/book" method="POST">
-    <label for="station-name">Station Name:</label><br>
-    <input type="text" id="station-name" name="station_name" value="{{ request.args.get('station_name') }}" readonly>
-    <label for="city">City:</label><br>
-    <input type="text" id="city" name="city" value="{{ request.args.get('city') }}" readonly>
+    <label for="Station_name">Station Name:</label><br>
+    <input type="text" id="Station_name" name="Station_name" value="{{ request.args.get('Station_name') }}" readonly>
+    <label for="City">City:</label><br>
+    <input type="text" id="City" name="City" value="{{ request.args.get('City') }}" readonly>
                 
-    <label for="available_ports">Selected Port:</label><br>
-    <input type="text" id="available_ports" name="available_ports" value="{{ request.args.get('available_ports') }}" readonly>
-    <label for="booking_date">Booking Date:</label><br>
-    <input type="date" id="booking_date" name="booking_date" required>
-    <label for="time_from">Time from:</label><br>
-    <input type="time" id="time_from" name="time_from" required>
-    <label for="time_to">Time to:</label>
-    <input type="time" id="time_to" name="time_to" required><br>
+    <label for="Available_ports">Selected Port:</label><br>
+    <input type="text" id="Available_ports" name="Available_ports" value="{{ request.args.get('Available_ports') }}" readonly>
+    <label for="Booking_date">Booking Date:</label><br>
+    <input type="date" id="Booking_date" name="Booking_date" required>
+    <label for="Time_from">Time from:</label><br>
+    <input type="time" id="Time_from" name="Time_from" required>
+    <label for="Time_to">Time to:</label>
+    <input type="time" id="Time_to" name="Time_to" required><br>
     <button type="submit" onclick="bookNow()">Book Now</button>
   </form>
   

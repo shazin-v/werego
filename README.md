@@ -1,6 +1,5 @@
 # Werego - Electric Vehicle Charging Station Finder
 
-
 ## Overview
 
 The advent of electric vehicles (EVs) has ushered in a new era of eco-friendly and sustainable transportation. However, a significant challenge faced by EV owners is the availability of charging infrastructure. To address this issue, Werego is an innovative web-based system that empowers EV owners to locate, access, and reserve charging stations conveniently.
@@ -28,13 +27,43 @@ Ensure you have the following software and tools installed:
 
 ## Installation
 
-Follow these steps to set up the Werego project:
+Follow these steps to set up Werego on your local machine:
 
-1. Clone the repository to your local machine:
+1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/shezi7025/werego.git
+   https://github.com/shazin-v/werego.git
+   cd werego
+   ```
 
+2. **Set Up a Virtual Environment:**
+
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate # On powershell:
+   ```
+
+3. **Install Required Packages:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Database Setup:**
+
+   Open MySQL and create a database for Werego (e.g., ev_db).
+   Update the database credentials in the project's configuration file to match your local MySQL setup.
+   Use the provided SQL file (if available) or manually create tables for booking, user, admin, and any other required entities based on the project’s models.
+
+5. **Run the Application:**
+
+   ```bash
+   python app.py
+   ```
+
+6. **Access the Application:**
+
+Open your browser and navigate to http://127.0.0.1:5000 to start using Werego.
 
 ## Usage
 
@@ -48,12 +77,11 @@ Book a Charging Slot: Reserve an available slot at your chosen station.
 
 Admin Features: If you are a charging station operator, log in to the admin panel to manage your stations and slots.
 
-
 ## screenshots
+
 Home Page
 
 ![Screenshot 1](screenshot/common/homepage.png)
-
 
 ## Admin - Page
 
@@ -86,13 +114,20 @@ Searching Nearby Station
 ![Screenshot 2](screenshot/user/booking_page.png)
 Booking Page
 
-
-
 ## Contributing
+
 We welcome contributions from the community to improve Werego. To contribute:
 
-Fork the repository.
-Create a new branch for your feature or bug fix.
-Commit your changes and push them to your fork.
-Submit a pull request to the main repository.
- 
+1. **Fork the repository.**
+2. **Create a new branch** for your feature or bug fix.
+3. **Commit your changes** and push them to your fork.
+4. **Submit a pull request** to the main repository.
+
+### Future Plans
+
+I will be converting Werego to use Next.js, React, TypeScript, Tailwind CSS, MongoDB, FastAPI, Express, Node.js, GraphQL, and Jest. The deployment will be done on Vercel. Feel free to create a fork and implement features or enhancements using these technologies!
+
+
+```
+
+```

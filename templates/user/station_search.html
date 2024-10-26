@@ -38,8 +38,8 @@
 	<h1>EV Charging Stations Booking</h1>
 	<p><strong>you have selected the following options:<br><br></strong></p>
 	<ul>
-		<li><strong>City:<br><br> {{ city }} </strong></li><br>
-		<li><strong>Charging Type:<br><br> {{ charger_type }} </strong></li><br>
+		<li><strong>City:<br><br> {{ City }} </strong></li><br>
+		<li><strong>Charging Type:<br><br> {{ Charger_type }} </strong></li><br>
 	  </ul>
 	  
 	<p>Please select a charging station from the list below:<br><br></p>
@@ -57,19 +57,19 @@
 		  <tbody>
 			{% for station in data %}
 			<tr>
-			  <td>{{ station.station_name }}</td>
-			  <td>{{ station.city }}</td>
-			  <td>{{ station.address }}</td>
-			  <td>{{ station.charger_type }}</td>
+			  <td>{{ station.Station_name }}</td>
+			  <td>{{ station.City }}</td>
+			  <td>{{ station.Address }}</td>
+			  <td>{{ station.Charger_type }}</td>
 			  <td>
 				<select name="ports">
-				  {% for port in station.available_ports %}
+				  {% for port in station.Available_ports %}
 				  <option value="{{ port }}">{{ port }}</option>
 				  {% endfor %}
 				</select>
 			  </td>
 			  <td>
-				<button class="book-now-btn" data-station="{{ station.station_name }}" data-city="{{ station.city }}" data-available-ports="{{ station.available_ports }}">Book Now</button>
+				<button class="book-now-btn" data-station="{{ station.Station_name }}" data-city="{{ station.City }}" data-available-ports="{{ station.Available_ports }}">Book Now</button>
 			  </td>
 			</tr>
 			{% endfor %}
@@ -89,12 +89,12 @@
 				url: '/booking',
 				method: 'POST',
 				data: { 
-					station_name: stationName,
-					city: city,
-					available_ports: available_ports 
+					Station_name: stationName,
+					City: city,
+					Available_ports: available_ports 
 				},
 				success: function(response) {
-					window.location.href = '/booking?station_name=' + stationName + '&city=' + city + '&available_ports=' + available_ports;
+					window.location.href = '/booking?Station_name=' + stationName + '&City=' + city + '&Available_ports=' + available_ports;
 				},
 				error: function(error) {
    				console.log("There was an error in ajax: " + error);

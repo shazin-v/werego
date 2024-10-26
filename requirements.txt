@@ -1,0 +1,3 @@
+Flask==2.2.2
+mysql-connector-python==8.0.33
+random2==1.0.1

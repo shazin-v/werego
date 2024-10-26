@@ -163,7 +163,7 @@ def register():
             return redirect(url_for('register', error='Passwords do not match', form_id='createAccount'))
 
         db = Db()
-        qry = db.insert("INSERT INTO login (username, email, password, usertype) VALUES (%s, %s,%s, 'user')", (username, email, password))
+        qry = db.insert("INSERT INTO login (username,  password, usertype) VALUES (%s, %s, 'user')", (username,  password))
 
         return '<script>alert("User registered"); window.location.href="/login";</script>'
     else:
@@ -195,7 +195,7 @@ def Manage_station():
     print('session ', session)
     if session['user_type'] == 'admin':
         db=Db()
-        qry=db.select("select id, station_name, address, city, charger_type, available_ports, status from admin_charging_station_list")
+        qry=db.select("select station_id, station_name, address, city, charger_type, available_ports, status from admin_charging_station_list")
         return render_template("admin/Manage_station.html",data=qry)
     else:
         return redirect('/')
@@ -220,7 +220,7 @@ def adm_delete_station(station_name):
     print('session ', session)
     if session['user_type'] == 'admin':
         db = Db()
-        qry = db.delete("delete from admin_charging_station_list where id='"+station_name+"'")
+        qry = db.delete("DELETE FROM admin_charging_station_list WHERE Station_name = %s", (station_name,))
         return '''<script>alert('station deleted');window.location="/Manage_station"</script>'''
     else:
         return redirect('/')
@@ -247,19 +247,19 @@ def user_list():
     print('session ', session)
     if session['user_type'] == 'admin':
         db=Db()
-        qry = db.select("SELECT login_id, email, name FROM login WHERE usertype='user'")
+        qry = db.select("SELECT * FROM user")
         return render_template("admin/user-list.html",data=qry)
     else:
         return redirect('/')
 
 
 # ==================delete user===========
-@app.route("/adm_delete_user/<login_id>")
-def adm_delete_user(login_id):
+@app.route("/adm_delete_user/<user_id>")
+def adm_delete_user(user_id):
     print('session ', session)
     if session['user_type'] == 'admin':
         db = Db()
-        qry = db.delete("delete from login where login_id='"+login_id+"'")
+        qry = db.delete("delete from user where user_id='"+user_id+"'")
         return '''<script>alert('user deleted');window.location="/user-list"</script>'''
     else:
         return redirect('/')
@@ -270,19 +270,19 @@ def view_booking():
     print('session ', session)
     if session['user_type'] == 'admin':
         db=Db()
-        bookings = db.select("select booking_id	, booking_date, time_from, time_to, city, station_name, available_ports, login_id  from bookings  order by booking_date desc;")
+        bookings = db.select("select Booking_id	, Booking_date, Time_from, Time_to, City, Station_name, Available_ports, login_id  from booking  order by Booking_date desc;")
         return render_template('admin/view_booking.html', bookings=bookings)
     else:
         return redirect('/')
 
 # ===========delete booking
 
-@app.route("/adm_delete_booking/<booking_id>")
-def adm_delete_booking(booking_id):
+@app.route("/adm_delete_booking/<Booking_id>")
+def adm_delete_booking(Booking_id):
     print('session ', session)
     if session['user_type'] == 'admin':
         db = Db()
-        qry = db.delete("delete from bookings where booking_id='"+booking_id+"'")
+        qry = db.delete("delete from booking where Booking_id='"+Booking_id+"'")
         return '''<script>alert('booking deleted');window.location="/view_booking"</script>'''
     else:
         return redirect('/')
@@ -298,48 +298,46 @@ def user_dashboard():
     if 'user_type' in session and session['user_type'] == "user":
         username = session['username'] # get the username from the session
         db = Db()
-        bookings = db.select("select booking_id	, booking_date, time_from, time_to, city, station_name, available_ports, login_id  from bookings where login_id = '%s' order by booking_date desc;", (session['uid'],))
+        bookings = db.select("select * from booking where login_id = '%s' order by Booking_date desc;", (session['uid'],))
         # print(bookings)  # print out the value of the bookings variable
         return render_template("user/user-login-dashboard.html", bookings=bookings, username=username)
     else:
         return redirect('/')
 
 
-@app.route('/usr_delete_booking/<booking_date>')
-def usr_delete_booking(booking_date):
+@app.route('/usr_delete_booking/<int:booking_id>')
+def usr_delete_booking(booking_id):
     if 'user_type' in session and session['user_type'] == "user":
-        username = session['username'] # get the username from the session
         db = Db()
         
-        # Delete the booking from the table
-        qry = db.delete("delete from bookings WHERE booking_date = %s", (booking_date,))
-         # Retrieve the updated bookings
-        bookings = db.select("SELECT booking_id, booking_date, time_from, time_to, city, station_name, available_ports, login_id FROM bookings WHERE login_id = %s ORDER BY booking_date DESC", (session['uid'],))
-        return '''<script>alert('booking deleted');window.location="/user-dashboard"</script>'''
+        # Delete the booking for the specific user and booking_id
+        db.delete("DELETE FROM booking WHERE booking_id = %s AND login_id = %s", (booking_id, session['uid']))
+        
+        return '''<script>alert('Booking deleted');window.location="/user-dashboard"</script>'''
     else:
-         return redirect('/user-dashboard')
+        return redirect('/user-dashboard')
 
 
 
+# TODO: Fix the DB (FK, table etc) and frontend field and backend Field
 
-
-@app.route('/user-profile', methods=['GET', 'POST'])
-def user_profile():
-    if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['confirm-password']
+# @app.route('/user-profile', methods=['GET', 'POST'])
+# def user_profile():
+#     if request.method == 'POST':
+#         name = request.form['name']
+#         email = request.form['email']
+#         password = request.form['password']
+#         confirm_password = request.form['confirm-password']
         
-        if password != confirm_password:
-            return redirect(url_for('user_profile', error='Passwords do not match'))
+#         if password != confirm_password:
+#             return redirect(url_for('user_profile', error='Passwords do not match'))
         
-        db = Db()
-        qry = db.update("UPDATE login SET name = %s, email = %s, password = %s WHERE username = %s", (name, email, password, session['username']))  # Assuming you have stored the logged-in user's username in the session
-        return '<script>alert("Account details updated"); window.location.href="/user-profile";</script>'
+#         db = Db()
+#         qry = db.update("UPDATE login SET name = %s, email = %s, password = %s WHERE username = %s", (name, email, password, session['username']))  # Assuming you have stored the logged-in user's username in the session
+#         return '<script>alert("Account details updated"); window.location.href="/user-profile";</script>'
 
-    error = request.args.get('error')
-    return render_template('user/user-profile.html', error=error)
+#     error = request.args.get('error')
+#     return render_template('user/user-profile.html', error=error)
 
 
 
@@ -348,10 +346,10 @@ def user_profile():
 def user_find_your_charger():
     if 'user_type' in session and session['user_type'] == 'user':
         if request.method == 'POST':
-            city = request.form.get('city')
-            charger_type = request.form.get('charger_type')
+            city = request.form.get('City')
+            charger_type = request.form.get('Charger_type')
             db = Db()
-            qry = db.select("select station_name, address, charger_type, available_ports from admin_charging_station_list where city = %s and charger_type = %s", (city, charger_type))
+            qry = db.select("select Station_name, Address, Charger_type, Available_ports from admin_charging_station_list where City = %s and Charger_type = %s", (city, charger_type))
             return render_template('user/station_search.html', data=qry)       
         else:
             return render_template('user/user_find_your_charger.html')
@@ -364,25 +362,25 @@ def user_find_your_charger():
 @app.route('/search_stations', methods=['POST'])
 def search_stations():
     # Get the form data
-    city = request.form.get('city')
-    charger_type = request.form.get('charger_type')
+    City = request.form.get('City')
+    Charger_type = request.form.get('Charger_type')
 
     # Redirect to the station_list page with the city and charger_type as URL parameters
-    return redirect(url_for('station_search', city=city, charger_type=charger_type))
+    return redirect(url_for('station_search', City=City, Charger_type=Charger_type))
 
 
 @app.route('/station_search', methods=['GET'])
 def station_search():
     if 'user_type' in session and session['user_type'] == 'user':
-        city = request.args.get('city')
-        charger_type = request.args.get('charger_type')
+        City = request.args.get('City')
+        Charger_type = request.args.get('Charger_type')
         # Query your MySQL database using the city and charge_type variables
         db = Db()
-        sql = "select * from admin_charging_station_list where city = %s and charger_type = %s"
-        ss = db.select(sql, (city, charger_type))
+        sql = "select * from admin_charging_station_list where City = %s and Charger_type = %s"
+        ss = db.select(sql, (City, Charger_type))
 
         # Return the results to the user in a new template
-        return render_template('user/station_search.html', data=ss, city=city, charger_type=charger_type)
+        return render_template('user/station_search.html', data=ss, City=City, Charger_type=Charger_type)
     else:
         return redirect('/')
 
@@ -390,24 +388,24 @@ def station_search():
 @app.route('/booking', methods=['GET', 'POST'])
 def booking():
     if request.method == 'POST':
-        station_name = request.form['station_name']
-        city = request.form['city']
-        available_ports = request.form['available_ports']
-        return redirect(url_for('booking_form',  station_name=station_name, city=city, available_ports=available_ports))
+        Station_name = request.form['Station_name']
+        City = request.form['City']
+        Available_ports = request.form['Available_ports']
+        return redirect(url_for('booking_form',  Station_name=Station_name, City=City, Available_ports=Available_ports))
     else:
         # handle GET request to display the form
-        station_name = request.args.get('station_name')
-        city = request.args.get('city')
-        available_ports = request.args.get('available_ports')
-        return redirect(url_for('booking_form', station_name=station_name, city=city, available_ports=available_ports))
+        Station_name = request.args.get('Station_name')
+        City = request.args.get('City')
+        Available_ports = request.args.get('Available_ports')
+        return redirect(url_for('booking_form', Station_name=Station_name, City=City, Available_ports=Available_ports))
 
 @app.route('/booking-form', methods=['GET'])
 def booking_form():
-    city = request.args.get('city')
-    available_ports = request.args.get('available_ports')
-    station_name = request.args.get('station_name')
+    city = request.args.get('City')
+    available_ports = request.args.get('Available_ports')
+    station_name = request.args.get('Station_name')
     db = Db()
-    station_data = db.select("select * from admin_charging_station_list where station_name = %s", (station_name,))
+    station_data = db.select("select * from admin_charging_station_list where Station_name = %s", (station_name,))
     session['station_data'] = station_data[0] if station_data else None
     if 'station_data' in session and session['station_data']:
         return render_template('/user/booking_form.html', city=city, available_ports=available_ports)
@@ -422,12 +420,12 @@ def booking_form():
 def book():
     if 'user_type' in session and session['user_type'] == 'user':
         # get the form data submitted by the user
-        station_name = request.form['station_name']
-        city = request.form['city']
-        available_ports = request.form['available_ports']
-        booking_date = request.form['booking_date']
-        time_from = request.form['time_from']
-        time_to = request.form['time_to']
+        station_name = request.form['Station_name']
+        city = request.form['City']
+        available_ports = request.form['Available_ports']
+        booking_date = request.form['Booking_date']
+        time_from = request.form['Time_from']
+        time_to = request.form['Time_to']
         login_id = session['uid']
 
 
@@ -437,19 +435,19 @@ def book():
         created_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # insert the booking data into the MySQL table
-        sql = "insert into bookings (station_name, city, available_ports, booking_date, time_from, time_to, created_at, login_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "insert into booking (Station_name, City, Available_ports, Booking_date, Time_from, Time_to, Created_id, login_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
         booking_id = db.insert(sql, (station_name, city, available_ports, booking_date, time_from, time_to, created_at, login_id))
 
         # redirect the user to their dashboard
         return render_template("user/user-login-dashboard.html", data={
-            'station_name': station_name,
-            'city': city,
-            'available_ports': available_ports,
-            'booking_date': booking_date,
-            'time_from': time_from,
-            'time_to': time_to,
-            'created_at': created_at,
-            'booking_id': booking_id
+            'Station_name': station_name,
+            'City': city,
+            'Available_ports': available_ports,
+            'Booking_date': booking_date,
+            'Time_from': time_from,
+            'Time_to': time_to,
+            'Created_id': created_at,
+            'Booking_id': booking_id
         })
     else:
         return redirect('/booking-form')
@@ -457,4 +455,5 @@ def book():
 
 
 
-if __name__ == '__main__':        app.run(host='127.0.0.1', port=5000, debug=True)
+if __name__ == '__main__':        
+    app.run(host='127.0.0.1', port=5000, debug=True)

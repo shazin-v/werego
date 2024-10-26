@@ -33,9 +33,9 @@
       
       <h1>Find Your Charge Point</h1>
       <form action="{{ url_for('search_stations') }}" method="post">
-        <label for="city">Select a city: </label>
-        <select id="city" name="city" required>
-          <option value="">--Select a city--</option>
+        <label for="City">Select a City: </label>
+        <select id="City" name="City" required>
+          <option value="">--Select a City--</option>
           <option value="thiruvananthapuram">Thiruvananthapuram</option>
           <option value="Kollam">Kollam</option>
           <option value="Pathanamthitta">Pathanamthitta</option>
@@ -53,8 +53,8 @@
         </select>
         <br />
         <br>
-        <label for="charger_type">Select Charging Type:</label>
-        <select name="charger_type" id="charger_type" required>
+        <label for="Charger_type">Select Charging Type:</label>
+        <select name="Charger_type" id="Charger_type" required>
           <option value="">--Select--</option>
           <option value="AC Level 1 Charging">AC Level 1 Charging</option>
           <option value="AC Level 2 Charging">AC Level 2 Charging</option>
